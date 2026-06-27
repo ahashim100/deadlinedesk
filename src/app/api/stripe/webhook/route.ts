@@ -4,6 +4,7 @@ import { NextResponse } from 'next/server';
 import type Stripe from 'stripe';
 import { getStripe } from '@/lib/stripe';
 import { createAdminClient } from '@/lib/supabase/admin';
+import type { SubscriptionTier } from '@/lib/database.types';
 
 // Stripe needs the raw body to verify the signature.
 export const runtime = 'nodejs';
@@ -36,6 +37,8 @@ export async function POST(request: Request) {
     fields: {
       subscription_status: string;
       stripe_subscription_id: string | null;
+      subscription_tier?: SubscriptionTier;
+      stripe_price_id?: string | null;
     },
   ) {
     await admin
@@ -44,17 +47,23 @@ export async function POST(request: Request) {
       .eq('stripe_customer_id', customerId);
   }
 
+  function tierFromPriceId(priceId: string | undefined): SubscriptionTier {
+    if (priceId && priceId === process.env.STRIPE_PRICE_ID_PRO) return 'pro';
+    return 'base'; // any other active price defaults to base
+  }
+
   switch (event.type) {
     case 'customer.subscription.created':
     case 'customer.subscription.updated':
     case 'customer.subscription.deleted': {
       const sub = event.data.object as Stripe.Subscription;
+      const isDeleted = event.type === 'customer.subscription.deleted';
+      const priceId = sub.items.data[0]?.price?.id;
       await syncByCustomer(sub.customer as string, {
-        subscription_status:
-          event.type === 'customer.subscription.deleted'
-            ? 'canceled'
-            : sub.status,
+        subscription_status: isDeleted ? 'canceled' : sub.status,
         stripe_subscription_id: sub.id,
+        subscription_tier: isDeleted ? 'free' : tierFromPriceId(priceId),
+        stripe_price_id: isDeleted ? null : (priceId ?? null),
       });
       break;
     }

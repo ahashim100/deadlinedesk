@@ -13,6 +13,7 @@ export type DeadlineType =
 export type DeadlineStatus = 'upcoming' | 'done' | 'dismissed';
 export type DeadlineSource = 'rule' | 'manual';
 export type ReminderChannel = 'email' | 'sms';
+export type SubscriptionTier = 'free' | 'base' | 'pro';
 
 // NOTE: these are `type` aliases, not `interface`s, on purpose — only object
 // type aliases satisfy supabase-js's `Record<string, unknown>` row constraint.
@@ -21,7 +22,9 @@ export type Profile = {
   email: string | null;
   stripe_customer_id: string | null;
   stripe_subscription_id: string | null;
+  stripe_price_id: string | null;
   subscription_status: string;
+  subscription_tier: SubscriptionTier;
   notify_email: boolean;
   notify_sms: boolean;
   phone: string | null;

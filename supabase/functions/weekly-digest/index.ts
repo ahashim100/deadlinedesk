@@ -12,7 +12,6 @@ const SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY');
 const EMAIL_FROM = Deno.env.get('EMAIL_FROM') ?? 'DeadlineDesk <reminders@example.com>';
 
-const ACTIVE_STATUSES = ['active', 'trialing'];
 const DIGEST_HORIZON_DAYS = 30;
 
 const DEADLINE_LABELS: Record<string, string> = {
@@ -62,10 +61,11 @@ Deno.serve(async () => {
   const today = todayUtcIso();
   const horizon = addDaysIso(today, DIGEST_HORIZON_DAYS);
 
+  // Weekly digest is a Pro feature — only send to Pro subscribers.
   const { data: profiles, error: profErr } = await supabase
     .from('profiles')
-    .select('id, email, notify_email, cc_recipients, subscription_status')
-    .in('subscription_status', ACTIVE_STATUSES);
+    .select('id, email, notify_email, cc_recipients')
+    .eq('subscription_tier', 'pro');
   if (profErr) {
     return new Response(JSON.stringify({ error: profErr.message }), { status: 500 });
   }

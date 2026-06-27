@@ -32,7 +32,15 @@ export async function getProfile(): Promise<Profile | null> {
 
 const ACTIVE_STATUSES = ['active', 'trialing'];
 
-/** True when the profile's Stripe subscription is active/trialing. */
+/** True when the profile has a Base or Pro subscription. */
 export function hasActiveSubscription(profile: Profile | null): boolean {
-  return !!profile && ACTIVE_STATUSES.includes(profile.subscription_status);
+  if (!profile) return false;
+  if (profile.subscription_tier === 'base' || profile.subscription_tier === 'pro') return true;
+  // Fallback for the brief window between checkout and webhook delivery.
+  return ACTIVE_STATUSES.includes(profile.subscription_status);
+}
+
+/** True when the profile is on the Pro tier (calendar sync, CC, weekly digest). */
+export function hasPro(profile: Profile | null): boolean {
+  return !!profile && profile.subscription_tier === 'pro';
 }

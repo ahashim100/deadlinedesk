@@ -37,9 +37,13 @@ async function ensureCustomer(): Promise<string> {
 }
 
 /** Start a subscription Checkout session and redirect to Stripe. */
-export async function startCheckout(): Promise<void> {
-  const priceId = process.env.STRIPE_PRICE_ID;
-  if (!priceId) throw new Error('STRIPE_PRICE_ID is not set');
+export async function startCheckout(formData: FormData): Promise<void> {
+  const plan = formData.get('plan') === 'pro' ? 'pro' : 'base';
+  const priceId =
+    plan === 'pro'
+      ? process.env.STRIPE_PRICE_ID_PRO
+      : process.env.STRIPE_PRICE_ID_BASE;
+  if (!priceId) throw new Error(`STRIPE_PRICE_ID_${plan.toUpperCase()} is not set`);
 
   const customer = await ensureCustomer();
   const stripe = getStripe();

@@ -63,8 +63,7 @@ function Hero() {
             </Link>
           </div>
           <p className="mt-4 text-xs text-slate-500">
-            Free to add your properties · Reminders $10/month · No credit card to
-            start
+            Free to add your properties · Reminders from $9.99/month · No credit card to start
           </p>
         </div>
 
@@ -265,7 +264,7 @@ function Pricing() {
           </p>
         </div>
 
-        <div className="mx-auto mt-12 grid max-w-3xl gap-6 sm:grid-cols-2">
+        <div className="mx-auto mt-12 grid max-w-5xl gap-6 sm:grid-cols-3">
           {/* Free */}
           <div className="flex flex-col rounded-2xl border border-slate-200 bg-white p-8">
             <h3 className="text-lg font-semibold text-slate-900">Free</h3>
@@ -278,11 +277,11 @@ function Pricing() {
               </span>
               <span className="text-sm text-slate-500">/month</span>
             </p>
-            <ul className="mt-6 space-y-3 text-sm text-slate-600">
+            <ul className="mt-6 flex-1 space-y-3 text-sm text-slate-600">
               <Check>Add properties, units &amp; leases</Check>
               <Check>Automatic deadline calculation</Check>
               <Check>Full dashboard &amp; urgency view</Check>
-              <Cross>Email &amp; SMS reminders</Cross>
+              <Cross>Automated reminders</Cross>
             </ul>
             <Link
               href="/login"
@@ -292,31 +291,58 @@ function Pricing() {
             </Link>
           </div>
 
-          {/* Pro */}
+          {/* Base — Most popular */}
           <div className="relative flex flex-col rounded-2xl border-2 border-blue-600 bg-white p-8 shadow-lg shadow-blue-100">
             <span className="absolute -top-3 left-8 rounded-full bg-blue-600 px-3 py-1 text-xs font-semibold text-white">
               Most popular
             </span>
-            <h3 className="text-lg font-semibold text-slate-900">Pro</h3>
+            <h3 className="text-lg font-semibold text-slate-900">Base</h3>
             <p className="mt-1 text-sm text-slate-500">
               Reminders that reach you.
             </p>
             <p className="mt-6">
               <span className="text-4xl font-bold tracking-tight text-slate-900">
-                $10
+                $9.99
               </span>
               <span className="text-sm text-slate-500">/month</span>
             </p>
-            <ul className="mt-6 space-y-3 text-sm text-slate-600">
+            <ul className="mt-6 flex-1 space-y-3 text-sm text-slate-600">
               <Check>Everything in Free</Check>
-              <Check>Email reminders</Check>
+              <Check>Email reminders (daily)</Check>
               <Check>SMS / text reminders</Check>
-              <Check>Custom lead times (60/30/7/1 days)</Check>
-              <Check>Reminder activity log</Check>
+              <Check>Snooze &amp; reschedule deadlines</Check>
+              <Check>Completion records &amp; proof log</Check>
+              <Cross>Calendar sync &amp; weekly digest</Cross>
             </ul>
             <Link
               href="/login"
               className="mt-8 rounded-lg bg-blue-600 px-5 py-2.5 text-center text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700"
+            >
+              Start with Base
+            </Link>
+          </div>
+
+          {/* Pro */}
+          <div className="flex flex-col rounded-2xl border border-slate-200 bg-white p-8">
+            <h3 className="text-lg font-semibold text-slate-900">Pro</h3>
+            <p className="mt-1 text-sm text-slate-500">
+              Everything, automated.
+            </p>
+            <p className="mt-6">
+              <span className="text-4xl font-bold tracking-tight text-slate-900">
+                $19.99
+              </span>
+              <span className="text-sm text-slate-500">/month</span>
+            </p>
+            <ul className="mt-6 flex-1 space-y-3 text-sm text-slate-600">
+              <Check>Everything in Base</Check>
+              <Check>Calendar sync (.ics feed)</Check>
+              <Check>Weekly digest email</Check>
+              <Check>CC recipients (up to 5)</Check>
+            </ul>
+            <Link
+              href="/login"
+              className="mt-8 rounded-lg border border-slate-300 bg-white px-5 py-2.5 text-center text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
             >
               Start with Pro
             </Link>

@@ -4,7 +4,6 @@ import { NextResponse } from 'next/server';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { buildIcs, type IcsEvent } from '@/lib/ics';
 import { DEADLINE_LABELS } from '@/lib/database.types';
-import { ACTIVE_SUBSCRIPTION_STATUSES } from '@/lib/stripe';
 
 export const runtime = 'nodejs';
 
@@ -17,7 +16,7 @@ export async function GET(
 
   const { data: profile } = await admin
     .from('profiles')
-    .select('id, subscription_status')
+    .select('id, subscription_tier')
     .eq('calendar_token', token)
     .single();
 
@@ -28,8 +27,8 @@ export async function GET(
 
   let events: IcsEvent[] = [];
 
-  // Calendar sync is a Pro feature; only populate when subscribed.
-  if (ACTIVE_SUBSCRIPTION_STATUSES.includes(profile.subscription_status)) {
+  // Calendar sync is a Pro-tier feature.
+  if (profile.subscription_tier === 'pro') {
     const { data: deadlines } = await admin
       .from('deadlines')
       .select(
