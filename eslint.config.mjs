@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Deno Edge Functions are linted/typechecked by the Deno toolchain, not ESLint.
+    "supabase/functions/**",
   ]),
 ]);
 
